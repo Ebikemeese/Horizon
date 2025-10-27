@@ -1,8 +1,14 @@
-
+import Home from "@/pages/root/page";
+import Layout from "@/pages/root/layout";
 
 const AppLayout = () => {
     return (
-        <div>AppLayout</div>
+        <div>
+            <Layout>
+                <Home />
+            </Layout>
+        </div>
+        
     )
 }
 
