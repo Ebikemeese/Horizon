@@ -1,6 +1,7 @@
 import { sidebarLinks } from "@/constants"
 import { cn } from "@/lib/utils"
 import { Link, useLocation } from "react-router-dom"
+import Footer from "./Footer";
 
 
 const SideBar = ({ user }: SiderbarProps) => {
@@ -47,7 +48,7 @@ const SideBar = ({ user }: SiderbarProps) => {
                 USER
             </nav>
 
-            FOOTER
+            <Footer user={user}/>
         </div>
     )
 }

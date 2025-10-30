@@ -1,11 +1,16 @@
-import Home from "@/pages/root/page";
-import Layout from "@/pages/root/layout";
+import Layout from "@/pages/root/Layout";
+import { Helmet } from "react-helmet-async";
+import { Outlet } from "react-router-dom";
 
 const AppLayout = () => {
     return (
         <div>
+            <Helmet>
+                <html lang="en"/>
+            </Helmet>
+
             <Layout>
-                <Home />
+                <Outlet />
             </Layout>
         </div>
         

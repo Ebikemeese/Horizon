@@ -1,9 +1,18 @@
+import AuthForm from "@/components/AuthForm";
+import Layout from "../layout";
 
-
-function SignUp() {
+const SignUp = () => {
+   
     return (
-        <div>SignUp</div>
+        <Layout>
+            <section className="flex-center size-full max-sm:px-6">
+                <AuthForm 
+                    type="sign-up"
+                />
+            </section>
+        </Layout>
     )
 }
 
 export default SignUp
+

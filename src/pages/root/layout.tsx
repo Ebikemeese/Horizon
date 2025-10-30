@@ -1,10 +1,28 @@
 import MobileNav from "@/components/MobileNav";
 import SideBar from "@/components/SideBar"
+import { getLoggedInUser } from "@/lib/actions/user.actions";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import SignIn from "../auth/sign-in/SignIn";
+
 
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     
-    const loggedIn = { firstName: 'John', lastName: 'Doe' }
+    const [loggedIn, setLoggedIn] = useState<User | null>(null);
+    
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await getLoggedInUser();
+            setLoggedIn(user);
+        };
+
+        fetchUser();
+    }, []);
+    
+    if (!loggedIn) return (
+        <SignIn />
+    )
     
     return (
         <main className="flex h-screen w-full font-inter">
@@ -12,12 +30,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
             <div className="flex size-full flex-col">
                 <div className="root-layout">
-                    <img 
-                        src="/icons/logo.svg" 
-                        width={30} 
-                        height={30} 
-                        alt="Horizon logo"
-                    />
+                    <Link to="/">
+                        <img 
+                            src="/icons/logo.svg" 
+                            width={30} 
+                            height={30} 
+                            alt="Horizon logo"
+                        />
+                    </Link>
 
                     <div className="">
                         <MobileNav 

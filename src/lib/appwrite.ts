@@ -1,44 +1,46 @@
-"use server";
 
 import { Client, Account, Databases, Users } from "node-appwrite";
-import { cookies } from "next/headers";
+import cookie from "cookie";
+import type { Request } from "express";
 
-export async function createSessionClient() {
+
+export async function createSessionClient(req: Request) {
   const client = new Client()
-    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+    .setEndpoint(import.meta.env.VITE_PUBLIC_APPWRITE_ENDPOINT)
+    .setProject(import.meta.env.VITE_PUBLIC_APPWRITE_PROJECT);
 
-  const session = cookies().get("appwrite-session");
+    const cookies = cookie.parse(req.headers.cookie || "");
+    const session = cookies["appwrite-session"];
+    if (!session || !session) {
+      throw new Error("No session");
+    }
 
-  if (!session || !session.value) {
-    throw new Error("No session");
-  }
+    client.setSession(session);
 
-  client.setSession(session.value);
-
-  return {
-    get account() {
-      return new Account(client);
-    },
-  };
+    return {
+      get account() {
+        return new Account(client);
+      },
+    };
 }
 
 export async function createAdminClient() {
   const client = new Client()
-    .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!)
-    .setKey(process.env.NEXT_APPWRITE_KEY!);
+    .setEndpoint(import.meta.env.VITE_PUBLIC_APPWRITE_ENDPOINT)
+    .setProject(import.meta.env.VITE_PUBLIC_APPWRITE_PROJECT)
+    .setKey(import.meta.env.VITE_APPWRITE_KEY);
 
   return {
     get account() {
       return new Account(client);
     },
+
     get database() {
       return new Databases(client);
     },
+
     get user() {
       return new Users(client);
     }
   };
 }
-

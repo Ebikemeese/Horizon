@@ -1,10 +1,24 @@
 import HeaderBox from "@/components/HeaderBox"
 import RightSideBar from "@/components/RightSideBar"
 import TotalBalanceBox from "@/components/TotalBalanceBox"
+import { getLoggedInUser } from "@/lib/actions/user.actions"
+import { useEffect, useState } from "react"
 
-const Home = () => {
 
-    const loggedIn = { firstName: "John", lastName: "Doe", email: "johndoe@gmail.com" } 
+
+const Home =  () => {
+    const [loggedIn, setLoggedIn] = useState<User | null>(null);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await getLoggedInUser();
+            setLoggedIn(user);
+        };
+
+        fetchUser();
+    }, []);
+
+
 
     return (
         <section className="home">
@@ -13,7 +27,7 @@ const Home = () => {
                     <HeaderBox 
                         type="greeting"
                         title="Welcome"
-                        user={loggedIn?.firstName || "Guest"}
+                        user={loggedIn?.name || "Guest"}
                         subtext="Access and manage your account and transactions efficiently."
                     />
 
@@ -27,11 +41,14 @@ const Home = () => {
                 RECENT TRANSACTIONS
             </div>
 
-            <RightSideBar 
-                user={loggedIn}
-                transactions={[]}
-                banks={[{currentBalance: 123.50}, {currentBalance: 179.50}]}
-            />
+            {loggedIn && (
+                <RightSideBar 
+                    user={loggedIn}
+                    transactions={[]}
+                    banks={[{ currentBalance: 123.50 }, { currentBalance: 179.50 }]}
+                />
+            )}
+
         </section>
     )
 }
