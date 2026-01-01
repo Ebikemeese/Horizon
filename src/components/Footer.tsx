@@ -31,7 +31,6 @@ const Footer = ({ user, type = "desktop" }: FooterProps) => {
             </div>
 
             <div className="footer_image">
-                <span className={type === "mobile" ? "text-14 text-gray-600" : "hidden"}>logout &nbsp; </span>
                 <img  
                     src="/icons/logout.svg" 
                     alt="logout" 

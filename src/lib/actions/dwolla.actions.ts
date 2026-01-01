@@ -1,9 +1,7 @@
-"use server";
-
 import { Client } from "dwolla-v2";
 
 const getEnvironment = (): "production" | "sandbox" => {
-  const environment = process.env.DWOLLA_ENV as string;
+  const environment = import.meta.env.VITE_DWOLLA_ENV as string;
 
   switch (environment) {
     case "sandbox":
@@ -19,8 +17,8 @@ const getEnvironment = (): "production" | "sandbox" => {
 
 const dwollaClient = new Client({
   environment: getEnvironment(),
-  key: process.env.DWOLLA_KEY as string,
-  secret: process.env.DWOLLA_SECRET as string,
+  key: import.meta.env.VITE_DWOLLA_KEY as string,
+  secret: import.meta.env.VITE_DWOLLA_SECRET as string,
 });
 
 // Create a Dwolla Funding Source using a Plaid Processor Token
@@ -51,13 +49,36 @@ export const createOnDemandAuthorization = async () => {
   }
 };
 
+// export const createDwollaCustomer = async (
+//   newCustomer: NewDwollaCustomerParams
+// ) => {
+//   try {
+//     return await dwollaClient
+//       .post("customers", newCustomer)
+//       .then((res) => res.headers.get("location"));
+//   } catch (err) {
+//     console.error("Creating a Dwolla Customer Failed: ", err);
+//   }
+// };
+
 export const createDwollaCustomer = async (
   newCustomer: NewDwollaCustomerParams
-) => {
+): Promise<string | undefined> => {
   try {
-    return await dwollaClient
-      .post("customers", newCustomer)
-      .then((res) => res.headers.get("location"));
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/dwolla/create-dwolla-customer/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newCustomer)
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create Dwolla customer");
+    }
+
+    const data = await response.json();
+    return data.location; // This is the Dwolla customer URL returned by your backend
   } catch (err) {
     console.error("Creating a Dwolla Customer Failed: ", err);
   }
@@ -79,7 +100,7 @@ export const createTransfer = async ({
         },
       },
       amount: {
-        currency: "USD",
+        currency: "NGN",
         value: amount,
       },
     };

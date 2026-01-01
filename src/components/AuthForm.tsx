@@ -10,6 +10,7 @@ import { authFormSchema } from "@/lib/utils"
 import { Loader2 } from 'lucide-react'
 import { useNavigate } from "react-router-dom"
 import { signIn, signUp } from "@/lib/actions/user.actions"
+import MonoLink from "./MonoLink"
 
 
 
@@ -35,11 +36,41 @@ const AuthForm = ({ type }: { type: string }) => {
         setIsLoading(true);
 
         try {
+
             if (type === "sign-up") {
-                const newUser = await signUp(data);
+
+                const userData: SignUpParams = {
+                    firstName: data.firstName!,
+                    lastName: data.lastName!,
+                    address1: data.address1!,
+                    city: data.city ?? "",     
+                    state: data.state ?? "",
+                    postalCode: data.postalCode!,
+                    dateOfBirth: data.dateOfBirth ?? "",
+                    ssn: data.ssn ?? "",
+                    email: data.email,
+                    password: data.password
+                };
+
+                const newUserDoc = await signUp(userData);
+
+                const newUser: User = {
+                    $id: newUserDoc.$id,
+                    userId: newUserDoc.id,
+                    email: newUserDoc.email,
+                    name: `${newUserDoc.firstName} ${newUserDoc.lastName}`,
+                    firstName: newUserDoc.firstName,
+                    lastName: newUserDoc.lastName,
+                    address1: newUserDoc.address1,
+                    city: newUserDoc.city,
+                    state: newUserDoc.state,
+                    postalCode: newUserDoc.postalCode,
+                    dateOfBirth: newUserDoc.dateOfBirth,
+                    ssn: newUserDoc.ssn,
+                };
+
                 setUser(newUser);
-                console.log("logged in user", newUser)
-                // navigate("/");
+                console.log("User: ", user)
             }
 
             if (type === "sign-in") {
@@ -90,7 +121,9 @@ const AuthForm = ({ type }: { type: string }) => {
             
             {user ? (
                 <div className="flex flex-col gap-4">
-                    {/* PlaidLink */}
+                    <MonoLink 
+                        user={user} variant="primary"
+                    />
                 </div>
             ) : (
                 <>

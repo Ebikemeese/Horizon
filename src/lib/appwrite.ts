@@ -28,7 +28,7 @@ export async function createAdminClient() {
   const client = new Client()
     .setEndpoint(import.meta.env.VITE_PUBLIC_APPWRITE_ENDPOINT)
     .setProject(import.meta.env.VITE_PUBLIC_APPWRITE_PROJECT)
-    .setKey(import.meta.env.VITE_APPWRITE_KEY);
+    .setKey(import.meta.env.VITE_APPWRITE_SECRET);
 
   return {
     get account() {
