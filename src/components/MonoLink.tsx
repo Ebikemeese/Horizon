@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Connect from "@mono.co/connect.js";
-import { exchangeMonoCode, updateUserMonoId  } from "@/lib/actions/user.actions";
+import { exchangeMonoCode, saveBankAccount } from "@/lib/actions/user.actions";
 
 interface MonoLinkProps {
   user: User;
@@ -21,13 +21,14 @@ const MonoLink: React.FC<MonoLinkProps> = ({ user, variant }) => {
       onSuccess: async (data: { code: string }) => {
         try {
           const monoData = await exchangeMonoCode({ code: data.code, user });
-          await updateUserMonoId(user.$id, monoData.data.id);
+          // console.log("Mono id", monoData.data)
+          // console.log("MonoLink userId: ", user)
+          await saveBankAccount(user.$id, monoData.data);
           navigate("/");
         } catch (error) {
           console.error("Error linking bank:", error);
         }
         
-
       },
       onClose: () => {
         console.log("Mono widget closed");

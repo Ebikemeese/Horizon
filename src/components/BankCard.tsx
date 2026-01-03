@@ -2,10 +2,17 @@ import { formatAmount } from "@/lib/utils"
 import { Link } from "react-router-dom"
 
 
-const BankCard = ({ account, userName, showBalance = true }: CreditCardProps) => {
+const BankCard = ({ account, userName, showBalance, onSelect, selectedBankId}: CreditCardProps) => {  
+    // console.log("b id: ", account.$id)
+    const isActive = selectedBankId === account.$id;
+    
     return (
         <div className="flex flex-col">
-            <Link to="/" className="bank-card">
+            <button 
+                onClick={() => onSelect(account.$id)} 
+                // className="bank-card cursor-pointer"
+                className={`bank-card cursor-pointer ${isActive ? "ring-2 ring-blue-500" : ""}`}
+            >
                 <div className="bank-card_content">
                     <div>
                         <h1 className="text-16 font-semibold text-white">
@@ -20,7 +27,7 @@ const BankCard = ({ account, userName, showBalance = true }: CreditCardProps) =>
                     <article className="flex flex-col gap-2">
                         <div className="flex justify-between">
                             <h1 className="text-12 font-semibold text-white">
-                                {userName}
+                                {account.bankName}
                             </h1>
 
                             <h2 className="text-12 font-semibold text-white">
@@ -29,7 +36,7 @@ const BankCard = ({ account, userName, showBalance = true }: CreditCardProps) =>
                         </div>
 
                         <p className="text-14 font-semibold tracking-[1.1px] text-white">
-                            ●●●● ●●●● ●●●● <span className="text-16">1234</span>
+                            ●●●● <span className="text-16">{account.accountNumber}</span> ●●●●
                         </p>
                     </article>
                 </div>
@@ -59,7 +66,7 @@ const BankCard = ({ account, userName, showBalance = true }: CreditCardProps) =>
                 alt="lines"
                 className="absolute top-0 left-0"
             />
-            </Link>
+            </button>
 
             {/* Copy card numbers */}
         </div>

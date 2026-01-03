@@ -141,6 +141,8 @@ declare interface CreditCardProps {
   account: Account;
   userName: string;
   showBalance?: boolean;
+  onSelect: (id: string) => void; 
+  selectedBankId: string | null;
 }
 
 declare interface BankInfoProps {
@@ -214,11 +216,14 @@ declare interface FooterProps {
   type?: 'mobile' | 'desktop'
 }
 
-declare interface RightSidebarProps {
+interface RightSidebarProps {
   user: User;
   transactions: Transaction[];
-  banks: Bank[] & Account[];
+  banks: Account[];                 // array of accounts
+  setSelectedBankId: (id: string) => void; // setter takes an ID
+  selectedBankId: string | null;    // currently selected ID
 }
+
 
 declare interface SiderbarProps {
   user: User;

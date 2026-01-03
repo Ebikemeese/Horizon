@@ -2,7 +2,11 @@ import { Link } from "react-router-dom"
 import BankCard from "./BankCard"
 
 
-const RightSideBar = ({ user, transactions, banks }: RightSidebarProps) => {
+const RightSideBar = ({ user, transactions, banks, setSelectedBankId, selectedBankId }: RightSidebarProps) => {
+    // banks.forEach(bank => { 
+    //     console.log("Bank id:", bank.$id); 
+    //     console.log("Bank name:", bank.bankName); 
+    // });
     return (
         <aside className="right-sidebar">
             <section className="flex flex-col pb-8">
@@ -42,28 +46,21 @@ const RightSideBar = ({ user, transactions, banks }: RightSidebarProps) => {
                 </div>
 
                 {banks?.length > 0 && (
-                    <div className="relative flex flex-1 flex-col items-center justify-center gap-5">
-                        <div className="relative z-10">
-                            <BankCard 
-                                key={banks[0].$id}
-                                account={banks[0]}
-                                userName={`${user.name}`}
-                                showBalance={false}
-                            />
-                        </div>
-
-                        {banks[1] && (
-                            <div className="absolute right-0 top-8 z-0 w-[90%]">
-                                <BankCard 
-                                    key={banks[1].$id}
-                                    account={banks[1]}
-                                    userName={`${user.name}`}
-                                    showBalance={false}
-                                />
-                            </div>
-                        )}
+                    <div className="flex flex-col gap-5 mt-4">
+                    {banks.map((bank, i) => (
+                        <BankCard
+                            key={bank.$id || i}
+                            account={bank}
+                            userName={user.name}
+                            showBalance={true}
+                            onSelect={setSelectedBankId}
+                            selectedBankId={selectedBankId}
+                            // isActive={selectedBankId === bank.$id} 
+                        />
+                    ))}
                     </div>
                 )}
+
             </section>
         </aside>
     )
