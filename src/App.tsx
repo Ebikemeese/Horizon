@@ -7,6 +7,7 @@ import Transfer from "./pages/root/payment-transfer/Transfer";
 import SignIn from "./pages/auth/sign-in/SignIn";
 import Home from "./pages/root/page";
 import SignUp from "./pages/auth/sign-up/SignUp";
+import AddBankPage from "./pages/auth/add-bank/AddBankPage"
 import * as Sentry from '@sentry/react';
 
 function App() {
@@ -24,9 +25,9 @@ function App() {
           <Route path="/" element={<AppLayout />}>
             <Route index element={<Home />} />
             <Route path="my-banks" element={<MyBanks />}/>
-            <Route path="transaction-history" element={<TransactionHistory />} />
+            <Route path="transaction-history/:id" element={<TransactionHistory />} />
             <Route path="payment-transfer" element={<Transfer />} />
-            
+            <Route path="add-bank" element={<AddBankPage />} />
 
           </Route>
         </Routes>

@@ -288,9 +288,32 @@
   }
 
   /* Home */
-  .home {
-    @apply /*no-scrollbar*/ flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll;
+  /* .home {
+    @apply flex w-full flex-row max-xl:max-h-screen max-xl:overflow-y-scroll;
+  } */
+
+  /* Right sidebar */
+  /* .right-sidebar {
+    @apply hidden h-screen max-h-screen flex-col border-l border-gray-200 xl:flex w-[355px] xl:overflow-y-scroll;
+  } */
+
+
+  .scrollbar-none {
+    -ms-overflow-style: none;  /* IE/Edge */
+    scrollbar-width: none;     /* Firefox */
   }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;             /* Chrome/Safari */
+  }
+
+   .home {
+    @apply flex flex-col xl:flex-row w-full max-xl:max-h-screen;
+  }
+
+  .right-sidebar {
+    @apply flex h-screen max-h-screen flex-col border-l border-gray-200 w-full xl:w-[355px] xl:overflow-y-scroll;
+  }
+
 
   .home-content {
     @apply /*no-scrollbar*/ flex w-full flex-1 flex-col gap-8 px-5 sm:px-8 py-7 lg:py-12 xl:max-h-screen xl:overflow-y-scroll;
@@ -334,11 +357,6 @@
 
   .recent-transactions-tablist {
     @apply /*custom-scrollbar*/ mb-8 flex w-full flex-nowrap;
-  }
-
-  /* Right sidebar */
-  .right-sidebar {
-    @apply /*no-scrollbar*/ hidden h-screen max-h-screen flex-col border-l border-gray-200 xl:flex w-[355px] xl:overflow-y-scroll /*!important*/;
   }
 
   .profile-banner {
@@ -514,7 +532,7 @@
 
   /* Bank Info */
   .bank-info_content {
-    @apply flex flex-1 items-center justify-between gap-2 overflow-hidden;
+    @apply flex items-center justify-between overflow-hidden;
   }
 
   /* Footer */

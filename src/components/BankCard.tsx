@@ -1,8 +1,8 @@
 import { formatAmount } from "@/lib/utils"
-import { Link } from "react-router-dom"
 
 
-const BankCard = ({ account, userName, showBalance, onSelect, selectedBankId}: CreditCardProps) => {  
+
+const BankCard = ({ account, userName, onSelect, selectedBankId}: CreditCardProps) => {  
     // console.log("b id: ", account.$id)
     const isActive = selectedBankId === account.$id;
     
@@ -16,7 +16,7 @@ const BankCard = ({ account, userName, showBalance, onSelect, selectedBankId}: C
                 <div className="bank-card_content">
                     <div>
                         <h1 className="text-16 font-semibold text-white">
-                            {account.name || userName}
+                            {userName}
                         </h1>
                         
                         <p className="font-ibm-plex-serif font-black text-white">

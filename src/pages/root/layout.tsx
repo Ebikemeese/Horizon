@@ -9,7 +9,7 @@ import SignIn from "../auth/sign-in/SignIn";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     
-    const [loggedIn, setLoggedIn] = useState<User | null>(null);
+    const [loggedIn, setLoggedIn] = useState<any | null>(null);
     
     useEffect(() => {
         const fetchUser = async () => {

@@ -1,13 +1,13 @@
 import { ID } from "node-appwrite";
 import { account } from "../appwrite.config";
-import { 
-  CountryCode, 
-  type ProcessorTokenCreateRequest, 
-  ProcessorTokenCreateRequestProcessorEnum, 
-  Products 
-} from "plaid";
-import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils";
-import { useQueryClient } from "@tanstack/react-query"
+// import { 
+//   CountryCode, 
+//   type ProcessorTokenCreateRequest, 
+//   ProcessorTokenCreateRequestProcessorEnum, 
+//   Products 
+// } from "plaid";
+// import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils";
+// import { useQueryClient } from "@tanstack/react-query"
 import { createAdminClient } from "../appwrite";
 import { Query } from "appwrite";
 
@@ -147,13 +147,14 @@ export const saveBankAccount = async (userId: string, monoData: any) => {
 };
 
 
-export async function getAccountFullData(accountId) {
+export async function getAccountFullData(accountId: string) {
   try {
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/mono/account/${accountId}/full/`, {
-      method: "GET",
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/mono/account/full-data/`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({account_id: accountId})
     });
 
     if (!response.ok) {
@@ -195,6 +196,28 @@ export const getUserMonoDataIdFromBank = async (userId: string) => {
     throw new Error("No bank accounts found for this user");
   }
   return accounts[0].monoAccountId; // or whichever field you saved
+};
+
+
+/**
+ * Fetch a user document from the database by the userId field.
+ */
+export const getUserById = async (userId: string) => {
+  const { database } = await createAdminClient();
+
+  try {
+    const result = await database.listDocuments(
+      DATABASE_ID,
+      USER_COLLECTION_ID,
+      [Query.equal("userId", userId)] // assumes you saved account.$id in a "userId" field
+    );
+
+
+    return result.documents[0];
+  } catch (err) {
+    console.error("Error fetching user by ID:", err);
+    return null;
+  }
 };
 
 

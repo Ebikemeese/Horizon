@@ -122,7 +122,7 @@ const AuthForm = ({ type }: { type: string }) => {
             {user ? (
                 <div className="flex flex-col gap-4">
                     <MonoLink 
-                        user={user} variant="primary"
+                        user={user} variant="ghost"
                     />
                 </div>
             ) : (

@@ -29,8 +29,8 @@ declare type User = {
   $id: string;
   email: string;
   userId: string;
-  dwollaCustomerUrl: string;
-  dwollaCustomerId: string;
+  // dwollaCustomerUrl: string;
+  // dwollaCustomerId: string;
   firstName: string;
   lastName: string;
   name: string;
@@ -49,18 +49,25 @@ declare type NewUserParams = {
   password: string;
 };
 
+// banks={bankData.map(acc => ({
+//     $id: acc.Bank?.data?.account?.id,
+//     bankName: acc.Bank?.data?.account?.institution?.name,
+//     accountNumber: acc.Bank?.data?.account?.account_number,
+//     currentBalance: acc.Bank?.data?.account?.balance || 0,
+// }))}
+
 declare type Account = {
-  id: string;
-  availableBalance: number;
+  $id: string;
   currentBalance: number;
-  officialName: string;
-  mask: string;
-  institutionId: string;
+  accountNumber: number;
+  bankName: string;
+  // mask: string;
+  // institutionId: string;
   name: string;
-  type: string;
-  subtype: string;
-  appwriteItemId: string;
-  shareableId: string;
+  // type: string;
+  // subtype: string;
+  // appwriteItemId: string;
+  // shareableId: string;
 };
 
 declare type Transaction = {
@@ -147,7 +154,7 @@ declare interface CreditCardProps {
 
 declare interface BankInfoProps {
   account: Account;
-  appwriteItemId?: string;
+  selectedBankId: string;
   type: "full" | "card";
 }
 
@@ -218,7 +225,7 @@ declare interface FooterProps {
 
 interface RightSidebarProps {
   user: User;
-  transactions: Transaction[];
+  // transactions: Transaction[];
   banks: Account[];                 // array of accounts
   setSelectedBankId: (id: string) => void; // setter takes an ID
   selectedBankId: string | null;    // currently selected ID

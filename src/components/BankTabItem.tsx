@@ -1,18 +1,18 @@
 import { cn, formUrlQuery } from "@/lib/utils"
 import { useNavigate, useSearchParams } from "react-router-dom"
 
-const BankTabItem = ({ account }) => {
+const BankTabItem = ({ account, selectedBankId }: any) => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
 
   // Check if current tab matches the query param
-  const isActive = searchParams.get("id") === account?.Bank?.account_id
+  const isActive = selectedBankId === account.Bank?.account_id
 
   const handleBankChange = () => {
     const newUrl = formUrlQuery({
       key: "id",
-      value: account?.Bank?.account_id,
-      params: searchParams, // pass current params so you don’t lose others
+      value: account.Bank?.data?.account?.id,
+      params: searchParams.toString(), // pass current params so you don’t lose others
     })
     navigate(newUrl)
   }
