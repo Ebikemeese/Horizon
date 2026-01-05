@@ -148,7 +148,7 @@ declare interface CreditCardProps {
   account: Account;
   userName: string;
   showBalance?: boolean;
-  onSelect: (id: string) => void; 
+  onSelect?: (id: string) => void; 
   selectedBankId: string | null;
 }
 

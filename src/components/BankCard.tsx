@@ -1,5 +1,5 @@
 import { formatAmount } from "@/lib/utils"
-
+import Copy from "./Copy"
 
 
 const BankCard = ({ account, userName, onSelect, selectedBankId}: CreditCardProps) => {  
@@ -9,7 +9,7 @@ const BankCard = ({ account, userName, onSelect, selectedBankId}: CreditCardProp
     return (
         <div className="flex flex-col">
             <button 
-                onClick={() => onSelect(account.$id)} 
+                onClick={() => onSelect?.(account.$id)} 
                 // className="bank-card cursor-pointer"
                 className={`bank-card cursor-pointer ${isActive ? "ring-2 ring-blue-500" : ""}`}
             >
@@ -68,7 +68,9 @@ const BankCard = ({ account, userName, onSelect, selectedBankId}: CreditCardProp
             />
             </button>
 
-            {/* Copy card numbers */}
+            <Copy 
+                title={account.accountNumber}
+            />
         </div>
         
     )
