@@ -4,13 +4,29 @@ import TotalBalanceBox from "@/components/TotalBalanceBox"
 import { getLoggedInUser, getAccountFullData, getUserBankAccounts } from "@/lib/actions/user.actions"//getUserMonoDataId
 import { useEffect, useState } from "react"
 import RecentTransactions from "@/components/RecentTransactions"
-
+import { useSearchParams, useNavigate } from "react-router-dom"
+import { formUrlQuery } from "@/lib/utils"
+ 
 
 const Home = () => {
     const [loggedIn, setLoggedIn] = useState<any | null>(null);
     const [bankData, setBankData] = useState<any[]>([]);
     const [selectedBank, setSelectedBank] = useState<any | null>(null);
     const [selectedBankId, setSelectedBankId] = useState<any | null>(null);
+    const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
+
+    useEffect(() => {
+        if (!selectedBankId) return;
+
+        const newUrl = formUrlQuery({
+            key: "id",
+            value: selectedBankId,
+            params: searchParams.toString(), // keep other params intact
+        });
+
+        navigate(newUrl, { replace: true }); 
+    }, [selectedBankId, navigate, searchParams]);
 
 
     useEffect(() => {

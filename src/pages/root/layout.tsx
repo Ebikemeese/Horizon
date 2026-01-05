@@ -25,7 +25,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     )
     
     return (
-        <main className="flex h-screen w-full font-inter">
+        <main className="flex h-screen w-full font-inter scrollbar-none">
             <SideBar user={loggedIn}/>
 
             <div className="flex size-full flex-col">

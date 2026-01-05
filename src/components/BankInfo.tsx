@@ -1,8 +1,8 @@
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { cn, formUrlQuery, formatAmount, getAccountTypeColors } from "@/lib/utils";
 
 const BankInfo = ({ account, selectedBankId, type }: any) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const isActive = selectedBankId === account.Bank?.data?.account?.id;
@@ -13,7 +13,8 @@ const BankInfo = ({ account, selectedBankId, type }: any) => {
       key: "id",
       value: account.Bank?.data?.account?.id,
     });
-    navigate(newUrl);
+    console.log("Bankinfo url: ", newUrl)
+    // navigate(newUrl);
   };
 
   const colors = getAccountTypeColors(account?.type as AccountTypes);

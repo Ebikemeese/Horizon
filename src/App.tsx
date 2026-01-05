@@ -25,7 +25,7 @@ function App() {
           <Route path="/" element={<AppLayout />}>
             <Route index element={<Home />} />
             <Route path="my-banks" element={<MyBanks />}/>
-            <Route path="transaction-history/:id" element={<TransactionHistory />} />
+            <Route path="transaction-history" element={<TransactionHistory />} />
             <Route path="payment-transfer" element={<Transfer />} />
             <Route path="add-bank" element={<AddBankPage />} />
 

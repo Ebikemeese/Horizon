@@ -31,12 +31,16 @@ const RecentTransactions = ({ accounts, selectedBankId }: RecentTransactionsProp
     return (
         <section className="recent-transactions">
             <header className="flex items-center justify-between">
-                <h2 className="recent-transactions-label">
-                    Recent Transactions
-                </h2>
-
+                <div>
+                    <h2 className="recent-transactions-label">
+                        Recent Transactions
+                    </h2>
+                    <p className="header-box-subtext">
+                        Click bank name to view recent transactions
+                    </p>
+                </div>
                 <Link 
-                    to={`/transaction-history/id=${selectedBankId}`}
+                    to={`/transaction-history/?id=${selectedBankId}`}
                     className="view-all-btn"    
                 >
                     View all
