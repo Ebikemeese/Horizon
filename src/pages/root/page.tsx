@@ -1,8 +1,9 @@
 import HeaderBox from "@/components/HeaderBox"
 import RightSideBar from "@/components/RightSideBar"
 import TotalBalanceBox from "@/components/TotalBalanceBox"
-import { getLoggedInUser, getAccountFullData, getUserBankAccounts } from "@/lib/actions/user.actions"//getUserMonoDataId
+import { getLoggedInUser } from "@/lib/actions/user.actions"//getUserMonoDataId
 import { useEffect, useState } from "react"
+import { getAccountFullData, getUserBankAccounts } from "@/lib/actions/bank.actions"
 import RecentTransactions from "@/components/RecentTransactions"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import { formUrlQuery } from "@/lib/utils"
@@ -57,7 +58,7 @@ const Home = () => {
                 const data = await response.json(); 
 
                 setBankData(data.success)
-                console.log("Full Bank Data:", bankData);
+                console.log("Full Bank Data:", data);
                 // console.log("Balance:", bankData[0].Bank.data.account.balance)
             } catch (err) {
                 console.error("Error fetching user's bank accounts:", err);

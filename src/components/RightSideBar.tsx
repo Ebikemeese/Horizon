@@ -46,7 +46,7 @@ const RightSideBar = ({ user, banks, setSelectedBankId, selectedBankId }: RightS
                 </div>
 
                 {banks?.length > 0 && (
-                    <div className="grid grid-cols-2 xl:grid-cols-1 max-sm:grid-cols-1 min-md:grid-cols-2 gap-5 mt-4">
+                    <div className="flex flex-wrap items-center gap-4 justify-center">
                     {banks.map((bank, i) => (
                         <BankCard
                             key={bank.$id || i}

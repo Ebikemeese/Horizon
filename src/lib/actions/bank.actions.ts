@@ -1,185 +1,140 @@
-"use server";
+import { ID } from "node-appwrite";
+import { account } from "../appwrite.config";
+import { createAdminClient } from "../appwrite";
+import { Query } from "appwrite";
 
-import {
-  // ACHClass,
-  CountryCode,
-  // TransferAuthorizationCreateRequest,
-  // TransferCreateRequest,
-  // TransferNetwork,
-  // TransferType,
-} from "plaid";
+const {
+  VITE_APPWRITE_DATABASE_ID: DATABASE_ID,
+  VITE_APPWRITE_USER_COLLECTION_ID: USER_COLLECTION_ID,
+  VITE_APPWRITE_BANK_COLLECTION_ID: BANK_COLLECTION_ID
+} = import.meta.env;
 
-// import { plaidClient } from "../plaid";
-import { parseStringify } from "../utils";
 
-import { getTransactionsByBankId } from "./transaction.actions";
-// import { getBanks, getBank } from "./user.actions";
+export const getUserMonoDataId = async () => {
+  const { database } = await createAdminClient()
 
-// Get multiple bank accounts
-export const getAccounts = async ({ userId }: getAccountsProps) => {
   try {
-    // get banks from db
-    const banks = await getBanks({ userId });
+    // Get the logged-in account
+    const acc = await account.get();
 
-    const accounts = await Promise.all(
-      banks?.map(async (bank: Bank) => {
-        // get each account info from plaid
-        const accountsResponse = await plaidClient.accountsGet({
-          access_token: bank.accessToken,
-        });
-        const accountData = accountsResponse.data.accounts[0];
-
-        // get institution info from plaid
-        const institution = await getInstitution({
-          institutionId: accountsResponse.data.item.institution_id!,
-        });
-
-        const account = {
-          id: accountData.account_id,
-          availableBalance: accountData.balances.available!,
-          currentBalance: accountData.balances.current!,
-          institutionId: institution.institution_id,
-          name: accountData.name,
-          officialName: accountData.official_name,
-          mask: accountData.mask!,
-          type: accountData.type as string,
-          subtype: accountData.subtype! as string,
-          appwriteItemId: bank.$id,
-          sharaebleId: bank.shareableId,
-        };
-
-        return account;
-      })
+    // Fetch the corresponding user document from your users collection
+    const userDoc = await database.getDocument(
+      DATABASE_ID,
+      USER_COLLECTION_ID,
+      ID.unique(), 
     );
 
-    const totalBanks = accounts.length;
-    const totalCurrentBalance = accounts.reduce((total, account) => {
-      return total + account.currentBalance;
-    }, 0);
-
-    return parseStringify({ data: accounts, totalBanks, totalCurrentBalance });
-  } catch (error) {
-    console.error("An error occurred while getting the accounts:", error);
-  }
-};
-
-// Get one bank account
-export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
-  try {
-    // get bank from db
-    const bank = await getBank({ documentId: appwriteItemId });
-
-    // get account info from plaid
-    const accountsResponse = await plaidClient.accountsGet({
-      access_token: bank.accessToken,
-    });
-    const accountData = accountsResponse.data.accounts[0];
-
-    // get transfer transactions from appwrite
-    const transferTransactionsData = await getTransactionsByBankId({
-      bankId: bank.$id,
-    });
-
-    const transferTransactions = transferTransactionsData.documents.map(
-      (transferData: Transaction) => ({
-        id: transferData.$id,
-        name: transferData.name!,
-        amount: transferData.amount!,
-        date: transferData.$createdAt,
-        paymentChannel: transferData.channel,
-        category: transferData.category,
-        type: transferData.senderBankId === bank.$id ? "debit" : "credit",
-      })
-    );
-
-    // get institution info from plaid
-    const institution = await getInstitution({
-      institutionId: accountsResponse.data.item.institution_id!,
-    });
-
-    const transactions = await getTransactions({
-      accessToken: bank?.accessToken,
-    });
-
-    const account = {
-      id: accountData.account_id,
-      availableBalance: accountData.balances.available!,
-      currentBalance: accountData.balances.current!,
-      institutionId: institution.institution_id,
-      name: accountData.name,
-      officialName: accountData.official_name,
-      mask: accountData.mask!,
-      type: accountData.type as string,
-      subtype: accountData.subtype! as string,
-      appwriteItemId: bank.$id,
+    // Merge account info with custom fields
+    return {
+      ...acc,
+      ...userDoc, // includes monoDataId and other custom fields
     };
-
-    // sort transactions by date such that the most recent transaction is first
-      const allTransactions = [...transactions, ...transferTransactions].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-
-    return parseStringify({
-      data: account,
-      transactions: allTransactions,
-    });
-  } catch (error) {
-    console.error("An error occurred while getting the account:", error);
+  } catch (err) {
+    console.error("Error fetching logged in user:", err);
+    return null;
   }
 };
 
-// Get bank info
-export const getInstitution = async ({
-  institutionId,
-}: getInstitutionProps) => {
+export async function exchangeMonoCode({
+  code,
+  user,
+}: {
+  code: string;
+  user: any;
+}) {
   try {
-    const institutionResponse = await plaidClient.institutionsGetById({
-      institution_id: institutionId,
-      country_codes: ["NG"] as CountryCode[],
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/mono/exchange_mono_code/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ code, user }),
     });
 
-    const intitution = institutionResponse.data.institution;
-
-    return parseStringify(intitution);
-  } catch (error) {
-    console.error("An error occurred while getting the accounts:", error);
-  }
-};
-
-// Get transactions
-export const getTransactions = async ({
-  accessToken,
-}: getTransactionsProps) => {
-  let hasMore = true;
-  let transactions: any = [];
-
-  try {
-    // Iterate through each page of new transaction updates for item
-    while (hasMore) {
-      const response = await plaidClient.transactionsSync({
-        access_token: accessToken,
-      });
-
-      const data = response.data;
-
-      transactions = response.data.added.map((transaction) => ({
-        id: transaction.transaction_id,
-        name: transaction.name,
-        paymentChannel: transaction.payment_channel,
-        type: transaction.payment_channel,
-        accountId: transaction.account_id,
-        amount: transaction.amount,
-        pending: transaction.pending,
-        category: transaction.category ? transaction.category[0] : "",
-        date: transaction.date,
-        image: transaction.logo_url,
-      }));
-
-      hasMore = data.has_more;
+    if (!response.ok) {
+      throw new Error(`Failed to exchange code: ${response.statusText}`);
     }
 
-    return parseStringify(transactions);
+    const data = await response.json();
+    console.log("Mono access token response:", data);
+
+    return data;
   } catch (error) {
-    console.error("An error occurred while getting the accounts:", error);
+    console.error("Error exchanging Mono code:", error);
+    throw error;
+  }
+}
+
+export const saveBankAccount = async (userId: string, monoData: any) => {
+  const { database } = await createAdminClient()
+
+  try {
+    const response = await database.createDocument(
+      DATABASE_ID,
+      BANK_COLLECTION_ID,
+      ID.unique(),
+    
+      {
+        userId: userId, 
+        monoBankId: monoData.id ?? "", 
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error("Error saving bank account:", error);
+    throw error;
   }
 };
+
+export async function getAccountFullData(accountId: string) {
+  try {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/mono/account/full-data/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({account_id: accountId})
+    });
+
+    if (!response.ok) {
+      // If backend returned 400 or other error
+      const errorData = await response.json();
+      throw new Error(`Error fetching account data: ${JSON.stringify(errorData)}`);
+    }
+
+    const data = await response.json();
+    return data; // { details, balance, transactions }
+  } catch (error) {
+    console.error("Failed to fetch account full data:", error);
+    throw error;
+  }
+}
+
+// Get all bank accounts for a given user
+export const getUserBankAccounts = async (userId: string) => {
+  const { database } = await createAdminClient();
+
+  try {
+    const response = await database.listDocuments(
+      DATABASE_ID,
+      BANK_COLLECTION_ID,
+      [Query.equal("userId.userId", userId)]
+    );
+
+    return response.documents; // array of bank account docs
+  } catch (error) {
+    console.error("Error fetching user's bank accounts:", error);
+    throw error;
+  }
+};
+
+// If you only want the first monoAccountId (monoDataId)
+export const getUserMonoDataIdFromBank = async (userId: string) => {
+  const accounts = await getUserBankAccounts(userId);
+  if (accounts.length === 0) {
+    throw new Error("No bank accounts found for this user");
+  }
+  return accounts[0].monoAccountId; // or whichever field you saved
+};
+
+

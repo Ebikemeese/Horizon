@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import Connect from "@mono.co/connect.js";
-import { exchangeMonoCode, saveBankAccount } from "@/lib/actions/user.actions";
+import { exchangeMonoCode, saveBankAccount } from "@/lib/actions/bank.actions";
 
 interface MonoLinkProps {
   user: User;

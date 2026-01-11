@@ -1,7 +1,8 @@
 import BankCard from "@/components/BankCard";
 import HeaderBox from "@/components/HeaderBox"
-import { getLoggedInUser, getUserBankAccounts } from "@/lib/actions/user.actions";
+import { getLoggedInUser } from "@/lib/actions/user.actions";
 import { useEffect, useState } from "react";
+import { getUserBankAccounts } from "@/lib/actions/bank.actions";
 import { useSearchParams } from "react-router-dom";
 
 const MyBanks = () => {
@@ -63,7 +64,7 @@ const MyBanks = () => {
                         Your cards
                     </h2>
 
-                    <div className="flex flex-wrap gap-6">
+                    <div className="flex flex-wrap items-center justify-center gap-6">
                         {bankData && bankData.map((banks) => (
                             <BankCard 
                                 key={banks.Bank?.data?.account?.id}

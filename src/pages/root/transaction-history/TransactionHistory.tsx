@@ -1,5 +1,5 @@
 import HeaderBox from "@/components/HeaderBox"
-import { getAccountFullData } from "@/lib/actions/user.actions";
+import { getAccountFullData } from "@/lib/actions/bank.actions";
 import { formatAmount } from "@/lib/utils";
 import { useEffect, useState } from "react"
 import { useSearchParams } from "react-router-dom"
