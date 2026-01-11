@@ -1,4 +1,5 @@
 import HeaderBox from "@/components/HeaderBox"
+import Loader from "@/components/Loader";
 import { getAccountFullData } from "@/lib/actions/bank.actions";
 import { formatAmount } from "@/lib/utils";
 import { useEffect, useState } from "react"
@@ -6,17 +7,24 @@ import { useSearchParams } from "react-router-dom"
 
 const TransactionHistory = () => {
   const [bankData, setBankData] = useState<any | null>(null);
-  const [searchParams] = useSearchParams()
-  const selectedBankId = searchParams.get("id")
+  const [loading, setLoading] = useState<boolean>(true); // 👈 loader state
+  const [searchParams] = useSearchParams();
+  const selectedBankId = searchParams.get("id");
 
   useEffect(() => {
     const getSelectedBank = async () => {
-      if (!selectedBankId) return;
+      if (!selectedBankId) {
+        setLoading(false); // nothing to load
+        return;
+      }
+      setLoading(true); // 👈 start loading
       try {
         const selectedBankData = await getAccountFullData(selectedBankId);
         setBankData(selectedBankData);
       } catch (error) {
         console.error("Error fetching user's selected bank data:", error);
+      } finally {
+        setLoading(false); // 👈 stop loading
       }
     };
 
@@ -27,12 +35,23 @@ const TransactionHistory = () => {
 
   // Hardcoded color scheme
   const colors = {
-    containerBg: "bg-gray-50",     // overall background
-    rowBg: "bg-white",             // each transaction row
-    badgeBg: "bg-blue-50",         // badge background
-    title: "text-blue-900",        // narration text
-    subText: "text-gray-600",      // balance/date text
+    containerBg: "bg-gray-50",
+    rowBg: "bg-white",
+    badgeBg: "bg-blue-50",
+    title: "text-blue-900",
+    subText: "text-gray-600",
   };
+
+  // 👇 Conditional rendering
+  if (loading) {
+    return (
+      <section className="flex items-center justify-center h-screen">
+        <p className="text-lg font-semibold">
+          <Loader />
+        </p>
+      </section>
+    );
+  }
 
   return (
     <div className={`transactions ${colors.containerBg} scrollbar-none p-6 rounded-xl`}>
@@ -86,9 +105,7 @@ const TransactionHistory = () => {
                     {tx.narration}
                   </h2>
 
-                  <div
-                    className={`text-12 rounded-full px-3 py-1 font-medium ${colors.subText} ${colors.badgeBg}`}
-                  >
+                  <div className={`text-12 rounded-full px-3 py-1 font-medium ${colors.subText} ${colors.badgeBg}`}>
                     {tx.type}
                   </div>
                 </div>
@@ -98,9 +115,7 @@ const TransactionHistory = () => {
                     {formatAmount(tx.balance || 0)}
                   </div>
 
-                  <div
-                    className={`text-12 rounded-full px-3 py-1 font-medium ${colors.subText} ${colors.badgeBg}`}
-                  >
+                  <div className={`text-12 rounded-full px-3 py-1 font-medium ${colors.subText} ${colors.badgeBg}`}>
                     {new Date(tx.date).toLocaleDateString("en-US", {
                       year: "numeric",
                       month: "short",
@@ -119,4 +134,4 @@ const TransactionHistory = () => {
   )
 }
 
-export default TransactionHistory
+export default TransactionHistory;

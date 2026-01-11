@@ -1,19 +1,20 @@
 import HeaderBox from "@/components/HeaderBox"
 import RightSideBar from "@/components/RightSideBar"
 import TotalBalanceBox from "@/components/TotalBalanceBox"
-import { getLoggedInUser } from "@/lib/actions/user.actions"//getUserMonoDataId
+import { getLoggedInUser } from "@/lib/actions/user.actions"
 import { useEffect, useState } from "react"
 import { getAccountFullData, getUserBankAccounts } from "@/lib/actions/bank.actions"
 import RecentTransactions from "@/components/RecentTransactions"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import { formUrlQuery } from "@/lib/utils"
- 
+import Loader from "@/components/Loader"
 
 const Home = () => {
     const [loggedIn, setLoggedIn] = useState<any | null>(null);
     const [bankData, setBankData] = useState<any[]>([]);
     const [selectedBank, setSelectedBank] = useState<any | null>(null);
     const [selectedBankId, setSelectedBankId] = useState<any | null>(null);
+    const [loading, setLoading] = useState<boolean>(true); // 👈 loader state
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
 
@@ -23,45 +24,39 @@ const Home = () => {
         const newUrl = formUrlQuery({
             key: "id",
             value: selectedBankId,
-            params: searchParams.toString(), // keep other params intact
+            params: searchParams.toString(),
         });
 
         navigate(newUrl, { replace: true }); 
     }, [selectedBankId, navigate, searchParams]);
 
-
     useEffect(() => {
         const fetchUser = async () => {
-            const user = await getLoggedInUser();
-            
-            if (!user?.$id) return; // exit early if undefined
-            await getUserBankAccounts(user.$id); // now TS knows it's a string
-
-            setLoggedIn(user);
-            console.log("Homepage user", user);
-
+            setLoading(true); // 👈 start loading
             try {
-                // Step 1: Get all bank accounts for this user
-                const accounts = await getUserBankAccounts(user?.$id); 
-                console.log("User Bank Accounts:", accounts);
+                const user = await getLoggedInUser();
+                if (!user?.$id) {
+                    setLoading(false);
+                    return;
+                }
 
+                setLoggedIn(user);
+
+                const accounts = await getUserBankAccounts(user.$id); 
                 const monoIds = accounts.map((acc: any) => acc.monoBankId);
-                console.log("MONO ID's:", monoIds)
+
                 const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/mono/accounts/full-data/`, { 
                     method: "POST", 
-                    headers: { 
-                        "Content-Type": "application/json", 
-                    }, 
+                    headers: { "Content-Type": "application/json" }, 
                     body: JSON.stringify({ account_ids: monoIds }), 
                 });
 
                 const data = await response.json(); 
-
-                setBankData(data.success)
-                console.log("Full Bank Data:", data);
-                // console.log("Balance:", bankData[0].Bank.data.account.balance)
+                setBankData(data.success);
             } catch (err) {
                 console.error("Error fetching user's bank accounts:", err);
+            } finally {
+                setLoading(false); // 👈 stop loading
             }
         };
 
@@ -70,27 +65,35 @@ const Home = () => {
 
     useEffect(() => {
         const getSelectedBank = async () => {
-            if (!selectedBankId) return; // guard clause
+            if (!selectedBankId) return;
             try {
                 const selectedBankData = await getAccountFullData(selectedBankId);
                 setSelectedBank(selectedBankData);
-                console.log("Selected Bank Data", selectedBankData);
             } catch (error) {
                 console.error("Error fetching user's selected bank data:", error);
             }
         };
 
         getSelectedBank();
-    }, [selectedBankId]); // add dependency
-
-    
+    }, [selectedBankId]);
 
     useEffect(() => {
         if (bankData.length > 0 && !selectedBankId) {
-            setSelectedBank(bankData[0]); // default to first
-            setSelectedBankId(bankData[0].Bank?.data?.account?.id)
+            setSelectedBank(bankData[0]);
+            setSelectedBankId(bankData[0].Bank?.data?.account?.id);
         }
     }, [bankData]);
+
+    // 👇 Conditional rendering
+    if (loading) {
+        return (
+            <section className="home flex items-center justify-center h-screen">
+                <p className="text-lg font-semibold">
+                    <Loader />
+                </p>
+            </section>
+        );
+    }
 
     return (
         <section className="home scrollbar-none">
@@ -106,7 +109,6 @@ const Home = () => {
                     <TotalBalanceBox 
                         accounts={bankData.map(acc => acc.Bank?.data?.account?.balance || 0)}
                         totalBanks={bankData.length}
-                        // totalCurrentBalance={bankData[0]?.Bank?.data?.account?.balance || 0}
                         totalCurrentBalance={selectedBank?.Bank?.data?.account?.balance || 0}
                     />
                 </header>
@@ -120,7 +122,6 @@ const Home = () => {
             {loggedIn && (
                 <RightSideBar
                     user={loggedIn}
-                    // transactions={[]}
                     banks={bankData.map(acc => ({
                         $id: acc.Bank?.data?.account?.id,
                         bankName: acc.Bank?.data?.account?.institution?.name,
@@ -131,9 +132,7 @@ const Home = () => {
                     setSelectedBankId={setSelectedBankId}
                     selectedBankId={selectedBankId}  
                 />
-
             )}
-
         </section>
     )
 }

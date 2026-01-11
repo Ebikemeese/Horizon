@@ -3,27 +3,42 @@ import Layout from "../Layout"
 import MonoLink from "../../../components/MonoLink"
 import { getLoggedInUser, getUserById } from "@/lib/actions/user.actions"
 import { useState, useEffect } from "react"
+import Loader from "@/components/Loader";
 
 const AddBankPage = () => {
   const [loggedIn, setLoggedIn] = useState<any | null>(null);
+  const [loading, setLoading] = useState<boolean>(true); // 👈 loader state
 
   useEffect(() => {
     const fetchUser = async () => {
-      const userData = await getLoggedInUser();
-      const user = await getUserById(userData.$id)
-      setLoggedIn(user);
-    //   console.log("Add bank user: ", user)
+      setLoading(true); // 👈 start loading
+      try {
+        const userData = await getLoggedInUser();
+        if (!userData?.$id) {
+          setLoading(false);
+          return;
+        }
+        const user = await getUserById(userData.$id);
+        setLoggedIn(user);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      } finally {
+        setLoading(false); // 👈 stop loading
+      }
     };
     fetchUser();
   }, []);
 
-  if (!loggedIn) {
+  // 👇 Conditional rendering
+  if (loading) {
     return (
-      <Layout>
+      // <Layout>
         <div className="flex justify-center items-center h-screen">
-          <p className="text-gray-500">Loading user...</p>
+          <p className="text-lg font-semibold">
+            <Loader />
+          </p>
         </div>
-      </Layout>
+      // </Layout>
     );
   }
 
