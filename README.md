@@ -1,73 +1,35 @@
-# React + TypeScript + Vite
+# 🌐 Horizon Bank App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Horizon is a modern banking platform that allows users to **link their existing Nigerian bank accounts** into one unified dashboard. The app provides a seamless way to view balances, track transactions, and manage multiple accounts from different banks in one place.
 
-Currently, two official plugins are available:
+⚠️ **Note:** Transfers between banks are currently disabled because Horizon does not yet have a government-issued license to process financial transactions. The app is intended as a demo/prototype platform.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Account Linking:** Connect multiple Nigerian bank accounts using [Mono](https://mono.co).
+- **Unified Dashboard:** View balances and transactions across all linked accounts.
+- **Authentication & Database:** Secure login and data storage powered by [Appwrite](https://appwrite.io).
+- **Transaction History:** Track recent transactions across accounts.
+- **Error Monitoring:** Integrated with [Sentry](https://sentry.io) for both **frontend** and **backend** error tracking.
+- **Responsive UI:** Built with React + TypeScript and styled with TailwindCSS.
+- **Charts & Analytics:** Visualize balances and spending using Chart.js.
+- **Deployment:**  
+  - **Frontend:** Hosted on GitHub Pages → [Horizon Live Demo](https://ebikemeese.github.io/Horizon/)  
+  - **Backend:** Hosted on [Render](https://render.com)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Layer              | Technology                                                                 |
+|--------------------|-----------------------------------------------------------------------------|
+| **Frontend**       | React (TypeScript), Vite, TailwindCSS, Radix UI, React Query, Zod, Sentry   |
+| **Backend**        | Django, Django REST Framework, Render, Sentry                               |
+| **Database/Auth**  | Appwrite                                                                    |
+| **Bank Linking**   | Mono Connect.js                                                             |
+| **Deployment**     | GitHub Pages (frontend), Render (backend)                                   |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
