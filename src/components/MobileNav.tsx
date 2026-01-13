@@ -22,11 +22,11 @@ const MobileNav = ({ user }: MobileNavProps) => {
   }
 
   const sidebarLinks = [
-    { imgURL: "/icons/home.svg", route: "/", label: "Home" },
-    { imgURL: "/icons/dollar-circle.svg", route: "/my-banks", label: "My Banks" },
-    { imgURL: "/icons/transaction.svg", route: "/transaction-history", label: "Transaction History" },
-    { imgURL: "/icons/money-send.svg", route: "/payment-transfer", label: "Transfer Funds" },
-    { imgURL: "/icons/connect-bank.svg", route: "/add-bank", label: "Add Bank" },
+    { imgURL: "/Horizon/icons/home.svg", route: "/", label: "Home" },
+    { imgURL: "/Horizon/icons/dollar-circle.svg", route: "/my-banks", label: "My Banks" },
+    { imgURL: "/Horizon/icons/transaction.svg", route: "/transaction-history", label: "Transaction History" },
+    { imgURL: "/Horizon/icons/money-send.svg", route: "/payment-transfer", label: "Transfer Funds" },
+    { imgURL: "/Horizon/icons/connect-bank.svg", route: "/add-bank", label: "Add Bank" },
   ]
 
   return (
