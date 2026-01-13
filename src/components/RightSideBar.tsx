@@ -35,7 +35,7 @@ const RightSideBar = ({ user, banks, setSelectedBankId, selectedBankId }: RightS
 
                     <Link to="/add-bank" className="flex gap-2">
                         <img 
-                            src="/icons/plus.svg" 
+                            src="/Horizon/icons/plus.svg" 
                             alt="plus" 
                             width={20} 
                             height={20} 

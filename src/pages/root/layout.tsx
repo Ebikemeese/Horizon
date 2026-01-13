@@ -32,7 +32,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <div className="root-layout">
                     <Link to="/">
                         <img 
-                            src="/icons/logo.svg" 
+                            src="/Horizon/icons/logo.svg" 
                             width={30} 
                             height={30} 
                             alt="Horizon logo"

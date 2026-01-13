@@ -44,7 +44,7 @@ const BankCard = ({ account, userName, onSelect, selectedBankId}: CreditCardProp
 
             <div className="bank-card-Icon flex flex-col gap-27 ml-5">
                 <img 
-                    src="/icons/Paypass.svg" 
+                    src="/Horizon/icons/Paypass.svg" 
                     width={20} 
                     height={24}
                     alt="pay" 
@@ -52,7 +52,7 @@ const BankCard = ({ account, userName, onSelect, selectedBankId}: CreditCardProp
                 />
 
                 <img 
-                    src="/icons/mastercard.svg" 
+                    src="/Horizon/icons/mastercard.svg" 
                     width={45}
                     height={32}
                     alt="mastercard" 
@@ -60,7 +60,7 @@ const BankCard = ({ account, userName, onSelect, selectedBankId}: CreditCardProp
             </div>
 
             <img 
-                src="/icons/lines.png" 
+                src="/Horizon/icons/lines.png" 
                 width={316}
                 height={190}
                 alt="lines"

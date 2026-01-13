@@ -91,7 +91,7 @@ const TransactionHistory = () => {
             <div key={idx} className={`flex items-center gap-2 w-full p-4 rounded-lg shadow-sm ${colors.rowBg}`}>
               <figure className={`flex-center h-fit rounded-full bg-blue-100 ${colors.badgeBg}`}>
                 <img
-                  src="/icons/connect-bank.svg"
+                  src="/Horizon/icons/connect-bank.svg"
                   width={20}
                   height={20}
                   alt="connect bank"

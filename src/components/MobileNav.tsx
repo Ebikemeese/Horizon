@@ -34,7 +34,7 @@ const MobileNav = ({ user }: MobileNavProps) => {
       <Sheet>
         <SheetTrigger>
           <img
-            src="/icons/hamburger.svg"
+            src="/Horizon/icons/hamburger.svg"
             width={30}
             height={30}
             alt="menu"
@@ -44,7 +44,7 @@ const MobileNav = ({ user }: MobileNavProps) => {
 
         <SheetContent side="left" className="border-none pt-3 pl-4">
           <Link to="/" className="gap-1 px-4 cursor-pointer flex items-center gap-2">
-            <img src="/icons/logo.svg" width={34} height={34} alt="Horizon logo" />
+            <img src="/Horizon/icons/logo.svg" width={34} height={34} alt="Horizon logo" />
             <h1 className="text-26 font-ibm-plex-serif font-bold text-black-1">Horizon</h1>
           </Link>
 

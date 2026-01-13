@@ -1,6 +1,5 @@
-import { zodResolver } from "@hookform/resolvers/zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -17,45 +16,49 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
-
-
 const formSchema = z.object({
-  amount: z.preprocess(
-    (val) => Number(val), // convert string → number
-    z.number().min(100, "Amount must be at least ₦100")
-  ),
+  amount: z
+    .string()
+    .min(1, "Amount is required")
+    .transform((val) => Number(val))
+    .refine((val) => val >= 100, {
+      message: "Amount must be at least ₦100",
+    }),
   destination_account: z
     .string()
     .regex(/^\d{10}$/, "Account number must be exactly 10 digits"),
+  narration: z.string().optional(),
 });
 
 
 
-const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
-  const navigate = useNavigate();
+const PaymentTransferForm = () => {
   const [isLoading, setIsLoading] = useState(false);
 
+
+
   const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-    //   account_id: "",
-      amount: "",
-      destination_account: "",
-    //   destination_bank_code: "",
-      narration: "",
-    },
+    // resolver: zodResolver(formSchema),
+    // defaultValues: {
+    //   amount: 0.00,
+    //   destination_account: "",
+    //   narration: "",
+    // },
   });
+
 
   const submit = async (data: z.infer<typeof formSchema>) => {
     setIsLoading(true);
-
-
+    console.log(data)
     setIsLoading(false);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(submit)} className="flex flex-col">
+      <form 
+        onSubmit={form.handleSubmit(submit)} 
+        className="flex flex-col"
+      >
 
         <div className="payment-transfer_form-details">
           <h2 className="text-18 font-semibold text-gray-900">
@@ -67,7 +70,7 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
         </div>
 
         <FormField
-          control={form.control}
+          // control={form.control}
           name="destination_account"
           render={({ field }) => (
             <FormItem className="border-t border-gray-200">
@@ -91,7 +94,7 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
         />
 
         <FormField
-          control={form.control}
+          // control={form.control}
           name="amount"
           render={({ field }) => (
             <FormItem className="border-y border-gray-200">
@@ -102,6 +105,7 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
                 <div className="flex w-full flex-col">
                   <FormControl>
                     <Input
+                      type="number"
                       placeholder="ex: 5.00"
                       className="input-class"
                       {...field}
@@ -115,7 +119,7 @@ const PaymentTransferForm = ({ accounts }: PaymentTransferFormProps) => {
         />
 
         <FormField
-          control={form.control}
+          // control={form.control}
           name="narration"
           render={({ field }) => (
             <FormItem className="border-t border-gray-200">

@@ -37,7 +37,7 @@ const BankInfo = ({ account, selectedBankId, type }: any) => {
           <div key={idx} className="flex items-center gap-2 w-full">
             <figure className={`flex-center h-fit rounded-full bg-blue-100 ${colors.lightBg}`}>
               <img
-                src="/icons/connect-bank.svg"
+                src="/Horizon/icons/connect-bank.svg"
                 width={20}
                 height={20}
                 alt="connect bank"

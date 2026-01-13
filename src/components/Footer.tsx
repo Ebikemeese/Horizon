@@ -32,7 +32,7 @@ const Footer = ({ user, type = "desktop" }: FooterProps) => {
 
             <div className="footer_image">
                 <img  
-                    src="/icons/logout.svg" 
+                    src="/Horizon/icons/logout.svg" 
                     alt="logout" 
                     onClick={handleLogout}
                     aria-label="Logout"

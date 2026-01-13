@@ -56,7 +56,7 @@ const MonoLink: React.FC<MonoLinkProps> = ({ user, variant }) => {
           onClick={openMono}
           variant="ghost"
         >
-          <img src="/icons/connect-bank.svg" alt="connect bank" width={24} height={24}/>
+          <img src="/Horizon/icons/connect-bank.svg" alt="connect bank" width={24} height={24}/>
           <p className="text-[16] font-semibold">
             Connect Bank
           </p>
@@ -77,7 +77,7 @@ const MonoLink: React.FC<MonoLinkProps> = ({ user, variant }) => {
           className="plaidlink-default cursor-pointer"
           onClick={openMono}
         >
-          <img src="/icons/connect-bank.svg" alt="connect bank" width={24} height={24}/>
+          <img src="/Horizon/icons/connect-bank.svg" alt="connect bank" width={24} height={24}/>
           <p className="text-[16] font-semibold text-black-2">
             Connect Bank
           </p>

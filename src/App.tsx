@@ -9,12 +9,13 @@ import Home from "./pages/root/page";
 import SignUp from "./pages/auth/sign-up/SignUp";
 import AddBankPage from "./pages/auth/add-bank/AddBankPage"
 import * as Sentry from '@sentry/react';
+import NotFoundPage from "./pages/root/NotFoundPage";
 
 function App() {
 
   return (
     <HelmetProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/Horizon">
         <Routes>
            
           {/* Routes without layout */}
@@ -28,7 +29,7 @@ function App() {
             <Route path="transaction-history" element={<TransactionHistory />} />
             <Route path="payment-transfer" element={<Transfer />} />
             <Route path="add-bank" element={<AddBankPage />} />
-
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
       </BrowserRouter> 

@@ -66,7 +66,7 @@ export const topCategoryStyles = {
       bg: "bg-blue-100",
       indicator: "bg-blue-700",
     },
-    icon: "/icons/monitor.svg",
+    icon: "/Horizon/icons/monitor.svg",
   },
   Travel: {
     bg: "bg-success-25",
@@ -79,7 +79,7 @@ export const topCategoryStyles = {
       bg: "bg-success-100",
       indicator: "bg-success-700",
     },
-    icon: "/icons/coins.svg",
+    icon: "/Horizon/icons/coins.svg",
   },
   default: {
     bg: "bg-pink-25",
@@ -92,7 +92,7 @@ export const topCategoryStyles = {
       bg: "bg-pink-100",
       indicator: "bg-pink-700",
     },
-    icon: "/icons/shopping-bag.svg",
+    icon: "/Horizon/icons/shopping-bag.svg",
   },
 };
 

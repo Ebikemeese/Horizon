@@ -1,13 +1,17 @@
 {
   "name": "back-app",
+  "homepage": "https://ebikemeese.github.io/Horizon/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "copy dist\\index.html dist\\404.html",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+     "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@fontsource/ibm-plex-serif": "^5.2.7",
@@ -26,6 +30,7 @@
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "dwolla-v2": "^3.4.0",
+    "gh-pages": "^6.3.0",
     "lucide-react": "^0.548.0",
     "node-appwrite": "^20.0.0",
     "plaid": "^39.1.0",

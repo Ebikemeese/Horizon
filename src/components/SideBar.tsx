@@ -28,7 +28,7 @@ const SideBar = ({ user }: SiderbarProps) => {
       <nav className="flex flex-col gap-4">
         <Link to="/" className="mb-12 cursor-pointer flex items-center gap-2">
           <img
-            src="/icons/logo.svg"
+            src="/Horizon/icons/logo.svg"
             width={34}
             height={34}
             alt="Horizon logo"

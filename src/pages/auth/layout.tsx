@@ -8,7 +8,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="auth-asset">
             <div>
                 <img 
-                    src="/icons/auth-image.svg" 
+                    src="/Horizon/icons/auth-image.svg" 
                     alt="Auth image" 
                     width={500}
                     height={500}
