@@ -6,7 +6,7 @@ import { Query } from "appwrite";
 const {
   VITE_APPWRITE_DATABASE_ID: DATABASE_ID,
   VITE_APPWRITE_USER_COLLECTION_ID: USER_COLLECTION_ID,
-  VITE_APPWRITE_BANK_COLLECTION_ID: BANK_COLLECTION_ID
+  // VITE_APPWRITE_BANK_COLLECTION_ID: BANK_COLLECTION_ID
 } = import.meta.env;
 
 export const getLoggedInUser = async () => {
